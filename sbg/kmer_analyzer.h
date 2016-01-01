@@ -23,7 +23,7 @@ class KmerAnalyzer {
         // methods
         KmerAnalyzer(const char*, const int);
         priority_queue<Kmer, std::vector<Kmer>, Compare> find_top_kmers(int);
-        void print_top_kmers(int);
+        void print_top_kmers(int, bool);
     private:
         // attributes
         const int kmer_size;
@@ -33,6 +33,7 @@ class KmerAnalyzer {
         // methods
         void load_kmers();
         void extract_kmers_and_add(const string &);
+        void clean_infrequent_kmers(int);
 };
 
 

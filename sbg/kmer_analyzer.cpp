@@ -20,6 +20,21 @@ priority_queue<Kmer, std::vector<Kmer>, Compare> KmerAnalyzer::find_top_kmers(co
     return min_heap;
 }
 
+void KmerAnalyzer::clean_infrequent_kmers(int threshold) {
+    int removed = 0;
+
+    for(auto it = begin(occurrence_map); it != end(occurrence_map);)
+    {
+        if (it->second <= threshold) {
+            it = occurrence_map.erase(it);
+            removed++;
+        }
+        else
+            ++it;
+    }
+    cerr << removed << " elements removed with threshold: " << threshold << "\n";
+}
+
 
 void KmerAnalyzer::extract_kmers_and_add(const string & sequence) {
     string kmer;
@@ -33,7 +48,9 @@ void KmerAnalyzer::extract_kmers_and_add(const string & sequence) {
 void KmerAnalyzer::load_kmers() {
     string line;
     ifstream input_file (filename);
+    int threshold = 4;
     int line_number = 0;
+    int epoch = 0;
     if (input_file.is_open())
     {
         while ( getline (input_file,line) )
@@ -43,8 +60,10 @@ void KmerAnalyzer::load_kmers() {
             if (line_number % 4 == 2) {
                 extract_kmers_and_add(line);
             }
-            if (line_number % 12 == 0) {
-                cerr << line_number / 4 << " lines readed" << "\n";
+            if (line_number % 2000000 == 0) {
+                cerr << line_number / 4 << " sequence lines readed" << "\n";
+                clean_infrequent_kmers(threshold * ++epoch);
+                //clean_infrequent_kmers(threshold);
             }
         }
         input_file.close();
@@ -53,16 +72,18 @@ void KmerAnalyzer::load_kmers() {
     else cerr << "Unable to open file"; 
 }
 
-void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
-    if (!is_loaded) {
-        load_kmers();
+void KmerAnalyzer::print_top_kmers(int num_top_kmers, bool force) {
+    if (!force) {
+        if (!is_loaded) {
+            load_kmers();
+        }
     }
 
     priority_queue<Kmer, std::vector<Kmer>, Compare> min_heap = find_top_kmers(num_top_kmers);
 
     while (!min_heap.empty()) {
         Kmer first = min_heap.top();
-        cout << first.occurrence << "\t" << first.label << "\n";
+        cerr << first.occurrence << "\t" << first.label << "\n";
         min_heap.pop();
     }
 }
@@ -76,6 +97,6 @@ int main(int argc, char *argv[]) {
     const int num_top_kmers = atoi(argv[3]);
 
     KmerAnalyzer analyzer(filename, kmer_size);
-    analyzer.print_top_kmers(num_top_kmers);
+    analyzer.print_top_kmers(num_top_kmers, false);
     return 0;
 }
