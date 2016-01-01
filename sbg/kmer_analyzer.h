@@ -1,5 +1,5 @@
-#ifndef __KMER_ANALYZER_H_INCLUDED__
-#define __KMER_ANALYZER_H_INCLUDED__
+#ifndef __KMER_ANALYZER_H__
+#define __KMER_ANALYZER_H__
 
 #include <iostream>
 #include <fstream>
@@ -23,7 +23,7 @@ class KmerAnalyzer {
         // methods
         KmerAnalyzer(const char*, const int);
         priority_queue<Kmer, std::vector<Kmer>, Compare> find_top_kmers(int);
-        void print_top_kmers(int, bool);
+        void print_top_kmers(int);
     private:
         // attributes
         const int kmer_size;
@@ -37,4 +37,4 @@ class KmerAnalyzer {
 };
 
 
-#endif // __KMER_ANALYZER_H_INCLUDED__
+#endif // __KMER_ANALYZER_H__

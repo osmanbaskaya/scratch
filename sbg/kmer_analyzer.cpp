@@ -72,12 +72,10 @@ void KmerAnalyzer::load_kmers() {
     else cerr << "Unable to open file"; 
 }
 
-void KmerAnalyzer::print_top_kmers(int num_top_kmers, bool force) {
-    if (!force) {
+void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
         if (!is_loaded) {
             load_kmers();
         }
-    }
 
     priority_queue<Kmer, std::vector<Kmer>, Compare> min_heap = find_top_kmers(num_top_kmers);
 
@@ -97,6 +95,6 @@ int main(int argc, char *argv[]) {
     const int num_top_kmers = atoi(argv[3]);
 
     KmerAnalyzer analyzer(filename, kmer_size);
-    analyzer.print_top_kmers(num_top_kmers, false);
+    analyzer.print_top_kmers(num_top_kmers);
     return 0;
 }

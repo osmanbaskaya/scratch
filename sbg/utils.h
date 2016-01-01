@@ -1,5 +1,5 @@
-#ifndef __UTILS_H_INCLUDED__
-#define __UTILS_H_INCLUDED__
+#ifndef __UTILS_H__
+#define __UTILS_H__
 
 #include <string>
 
@@ -14,4 +14,4 @@ class Kmer
 };
 
 
-#endif // __UTILS_H_INCLUDED__
+#endif // __UTILS_H__
