@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 KMER_SIZE = 30
 NUM_TOP_KMERS = 25
 
