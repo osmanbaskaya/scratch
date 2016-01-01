@@ -2,6 +2,7 @@
 
 KmerAnalyzer::KmerAnalyzer(const char * fn, const int size): filename(fn), kmer_size(size) {
     is_loaded = false;
+    sequence_size = 90;  // fastq format contains 90 nucleotid
 }
 
 priority_queue<Kmer, std::vector<Kmer>, Compare> KmerAnalyzer::find_top_kmers(const int num_top_kmers) {
@@ -36,10 +37,17 @@ void KmerAnalyzer::clean_infrequent_kmers(int threshold) {
 }
 
 
-void KmerAnalyzer::extract_kmers_and_add(const string & sequence) {
+void KmerAnalyzer::extract_kmers_and_add(const string & previous_line, const string & current_line) {
     string kmer;
+    string sequence;
+    // Construct resultant string from the previous and current sequence.
+    if (previous_line.length() > kmer_size)
+        sequence = previous_line.substr(sequence_size - kmer_size + 1, kmer_size-1) + current_line;
+    else
+        sequence = current_line;
+
     int end = sequence.size() - kmer_size;
-    for (int i=0; i < end; i++){
+    for (int i=0; i <= end; i++){
         kmer = sequence.substr(i, kmer_size);
         ++occurrence_map[kmer];
     }
@@ -47,6 +55,7 @@ void KmerAnalyzer::extract_kmers_and_add(const string & sequence) {
 
 void KmerAnalyzer::load_kmers() {
     string line;
+    string previous_line = "";
     ifstream input_file (filename);
     int threshold = 4;
     int line_number = 0;
@@ -58,7 +67,8 @@ void KmerAnalyzer::load_kmers() {
             line_number++;
             // read only the sequence rows.
             if (line_number % 4 == 2) {
-                extract_kmers_and_add(line);
+                extract_kmers_and_add(previous_line, line);
+                previous_line = line;
             }
             if (line_number % 2000000 == 0) {
                 cerr << line_number / 4 << " sequence lines readed" << "\n";

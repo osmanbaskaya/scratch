@@ -28,11 +28,12 @@ class KmerAnalyzer {
         // attributes
         const int kmer_size;
         const char * filename;
+        int sequence_size;
         unordered_map<string, int> occurrence_map;
         bool is_loaded;
         // methods
         void load_kmers();
-        void extract_kmers_and_add(const string &);
+        void extract_kmers_and_add(const string &, const string &);
         void clean_infrequent_kmers(int);
 };
 
