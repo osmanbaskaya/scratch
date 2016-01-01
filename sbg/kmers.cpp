@@ -102,14 +102,13 @@ void run(const char * filename, const int kmer_size, const int num_top_kmers) {
 }
 
 int main ( int argc, char *argv[] ) {
-    if (argc != 3) {
-        cout << "Usage:\nkmers FILENAME KMER_SIZE\n";
+    if (argc != 4) {
+        cerr << "Usage:\nkmers.out FILENAME KMER_SIZE NUM_TOP_KMERS\n";
     }
     const char * filename = argv[1];
-    // const int kmer_size = argv[2];
-    // const int num_top_kmers = argv[3];
-    const int kmer_size = 30;
-    const int num_top_kmers = 30;
+    const int kmer_size = atoi(argv[2]);
+    const int num_top_kmers = atoi(argv[3]);
+
     run(filename, kmer_size, num_top_kmers);
     return 0;
 }
