@@ -42,10 +42,13 @@ void KmerAnalyzer::extract_kmers_and_add(const string & previous_line, const str
     string kmer;
     string sequence;
     // Construct resultant string from the previous and current sequence.
-    if (previous_line.length() > kmer_size)
+    if (previous_line.length() >= kmer_size)
         sequence = previous_line.substr(sequence_size - kmer_size + 1, kmer_size-1) + current_line;
     else
         sequence = current_line;
+
+    // cerr << "Previous:" << previous_line << endl;
+    // cerr << "Concat:  " << sequence << endl;
 
     int end = sequence.size() - kmer_size;
     for (int i=0; i <= end; i++){
@@ -97,7 +100,14 @@ void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
     }
 }
 
-int KmerAnalyzer::foo(int bar) {
-    return bar;
+int KmerAnalyzer::get_total_kmer_size() {
+    int total = 0;
+    for (const auto & element: occurrence_map) {
+        total += element.second;
+    }
+    return total;
 }
 
+int KmerAnalyzer::get_unique_kmer_size() {
+    return occurrence_map.size();
+}

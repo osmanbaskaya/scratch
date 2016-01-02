@@ -24,7 +24,9 @@ class KmerAnalyzer {
         KmerAnalyzer(const char*, const int);
         priority_queue<Kmer, std::vector<Kmer>, Compare> find_top_kmers(int);
         void print_top_kmers(int);
-        int foo(int);
+        void load_kmers();
+        int get_unique_kmer_size();
+        int get_total_kmer_size();
     private:
         // attributes
         const int kmer_size;
@@ -33,7 +35,6 @@ class KmerAnalyzer {
         unordered_map<string, int> occurrence_map;
         bool is_loaded;
         // methods
-        void load_kmers();
         void extract_kmers_and_add(const string &, const string &);
         void clean_infrequent_kmers(int);
 };
