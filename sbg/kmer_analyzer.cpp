@@ -8,6 +8,7 @@ KmerAnalyzer::KmerAnalyzer(const char * fn, const int size): filename(fn), kmer_
 priority_queue<Kmer, std::vector<Kmer>, Compare> KmerAnalyzer::find_top_kmers(const int num_top_kmers) {
     priority_queue<Kmer, std::vector<Kmer>, Compare> min_heap;
     for (const auto & element: occurrence_map) {
+        // Add elements without checking until heap size equals to num_top_kmers
         if (min_heap.size() < num_top_kmers) {
             min_heap.push(Kmer(element.first, element.second));
         }
@@ -83,9 +84,9 @@ void KmerAnalyzer::load_kmers() {
 }
 
 void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
-        if (!is_loaded) {
-            load_kmers();
-        }
+    if (!is_loaded) {
+        load_kmers();
+    }
 
     priority_queue<Kmer, std::vector<Kmer>, Compare> min_heap = find_top_kmers(num_top_kmers);
 
@@ -96,15 +97,7 @@ void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
     }
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 4) {
-        cerr << "Usage:\nkmers.out FILENAME KMER_SIZE NUM_TOP_KMERS\n";
-    }
-    const char * filename = argv[1];
-    const int kmer_size = atoi(argv[2]);
-    const int num_top_kmers = atoi(argv[3]);
-
-    KmerAnalyzer analyzer(filename, kmer_size);
-    analyzer.print_top_kmers(num_top_kmers);
-    return 0;
+int KmerAnalyzer::foo(int bar) {
+    return bar;
 }
+

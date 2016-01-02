@@ -24,6 +24,7 @@ class KmerAnalyzer {
         KmerAnalyzer(const char*, const int);
         priority_queue<Kmer, std::vector<Kmer>, Compare> find_top_kmers(int);
         void print_top_kmers(int);
+        int foo(int);
     private:
         // attributes
         const int kmer_size;
