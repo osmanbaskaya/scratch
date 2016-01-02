@@ -2,7 +2,7 @@
 
 KmerAnalyzer::KmerAnalyzer(const char * fn, const int size): filename(fn), kmer_size(size) {
     is_loaded = false;
-    sequence_size = 90;  // fastq format contains 90 nucleotid
+    sequence_size = 90;  // fastq format contains 90 nucleotids
 }
 
 priority_queue<Kmer, std::vector<Kmer>, Compare> KmerAnalyzer::find_top_kmers(const int num_top_kmers) {
@@ -24,7 +24,6 @@ priority_queue<Kmer, std::vector<Kmer>, Compare> KmerAnalyzer::find_top_kmers(co
 
 void KmerAnalyzer::clean_infrequent_kmers(int threshold) {
     int removed = 0;
-
     for(auto it = begin(occurrence_map); it != end(occurrence_map);)
     {
         if (it->second <= threshold) {
@@ -75,6 +74,7 @@ void KmerAnalyzer::load_kmers() {
                 previous_line = line;
             }
             if (line_number % 2000000 == 0) {
+                // After passing 500K sequences, report it and clean the occurrence map.
                 cerr << line_number / 4 << " sequence lines readed" << "\n";
                 clean_infrequent_kmers(threshold * ++epoch);
                 //clean_infrequent_kmers(threshold);
@@ -88,14 +88,15 @@ void KmerAnalyzer::load_kmers() {
 
 void KmerAnalyzer::print_top_kmers(int num_top_kmers) {
     if (!is_loaded) {
-        load_kmers();
+        load_kmers(); // Load first.
     }
 
     priority_queue<Kmer, std::vector<Kmer>, Compare> min_heap = find_top_kmers(num_top_kmers);
 
+    // Traverse into heap and print min to max.
     while (!min_heap.empty()) {
         Kmer first = min_heap.top();
-        cerr << first.occurrence << "\t" << first.label << "\n";
+        cout << first.occurrence << "\t" << first.label << "\n";
         min_heap.pop();
     }
 }
