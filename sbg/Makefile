@@ -13,7 +13,7 @@ top-kmers-%.txt: kmers.out %.fastq.gz
 
 
 ### WITH CLASS STRUCTURE ###
-class-kmers.out: kmer_analyzer.cpp utils.cpp
+class-kmers.out: runner.cpp kmer_analyzer.cpp utils.cpp
 	g++ $^ -std=c++11 -o $@
 
 # Speed: 142.4 secs / 1M sequence lines. Memory: ~3GB memory.
